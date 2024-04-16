@@ -9,14 +9,13 @@ def canUnlockAll(boxes):
   n = len(boxes)
   openedBoxes = set(boxes[0])
   openedBoxes.add(0)
-  newBoxes = openedBoxes.copy()
-  while True:
-    for box in newBoxes:
-      for key in boxes[box]:
-        if key not in openedBoxes and key < n:
-          openedBoxes.add(key)
-    if len(openedBoxes) == len(newBoxes):
-      break
-    newBoxes = openedBoxes.copy()
+  newBoxes = set(boxes[0])
+  newBoxes.add(0)
+  while newBoxes:
+    box = newBoxes.pop()
+    for key in boxes[box]:
+      if key not in openedBoxes:
+        newBoxes.add(key)
+        openedBoxes.add(key)
 
-  return len(newBoxes) >= n
+  return len(openedBoxes) >= n
