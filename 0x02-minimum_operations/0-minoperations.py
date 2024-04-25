@@ -42,7 +42,8 @@ def minOperationsRec(n, Hnum, HprevNum, opCount, memo):
         memo (dict): Dictionary to store previously computed results.
 
     Returns:
-        int: Minimum number of operations required or float('inf') if not possible.
+        int: Minimum number of operations required or float('inf')
+        if not possible.
     """
     if Hnum == n:
         return opCount
@@ -52,7 +53,7 @@ def minOperationsRec(n, Hnum, HprevNum, opCount, memo):
     key = (Hnum, HprevNum)
 
     if key in memo:
-      return memo[key]
+        return memo[key]
 
     op1 = minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1, memo)
     op2 = minOperationsRec(n, Hnum * 2, Hnum, opCount + 2, memo)
