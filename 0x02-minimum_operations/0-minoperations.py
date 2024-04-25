@@ -22,7 +22,8 @@ def minOperations(n):
     elif n == 2:
         return 2
 
-    ans = minOperationsRec(n, 2, 1, 2, {})
+    memo = {}
+    ans = minOperationsRec(n, 2, 1, 2, memo)
     if ans == float('inf'):
         return 0
 
