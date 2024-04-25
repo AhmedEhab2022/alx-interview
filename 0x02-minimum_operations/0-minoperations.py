@@ -38,7 +38,7 @@ def minOperationsRec(n, Hnum, HprevNum, opCount):
     elif Hnum > n:
         return float('inf')
 
-    x = minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1)
-    y = minOperationsRec(n, Hnum * 2, Hnum, opCount + 2)
+    op1 = minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1)
+    op2 = minOperationsRec(n, Hnum * 2, Hnum, opCount + 2)
 
-    return min(x, y)
+    return min(op1, op2)
