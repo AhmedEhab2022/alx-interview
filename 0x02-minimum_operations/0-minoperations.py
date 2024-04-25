@@ -22,21 +22,40 @@ def minOperations(n):
     elif n == 2:
         return 2
 
-    ans = minOperationsRec(n, 2, 1, 2)
+    ans = minOperationsRec(n, 2, 1, 2, {})
     if ans == float('inf'):
         return 0
 
     return ans
 
 
-def minOperationsRec(n, Hnum, HprevNum, opCount):
+def minOperationsRec(n, Hnum, HprevNum, opCount, memo):
     """
-    Recursive function to calculate the fewest number of operations needed.
+    Recursive function to calculate the fewest number of operations needed,
+    with memoization to store results of previous computations.
+
+    Args:
+        n (int): The target number of 'H' characters.
+        Hnum (int): Current number of 'H' characters.
+        HprevNum (int): Number of 'H' characters in the last copy operation.
+        opCount (int): Current count of operations.
+        memo (dict): Dictionary to store previously computed results.
+
+    Returns:
+        int: Minimum number of operations required or float('inf') if not possible.
     """
     if Hnum == n:
         return opCount
     elif Hnum > n:
         return float('inf')
 
-    return min(minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1),
-               minOperationsRec(n, Hnum * 2, Hnum, opCount + 2))
+    key = (Hnum, HprevNum)
+
+    if key in memo:
+      return memo[key]
+
+    op1 = minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1, memo)
+    op2 = minOperationsRec(n, Hnum * 2, Hnum, opCount + 2, memo)
+
+    memo[key] = min(op1, op2)
+    return memo[key]
