@@ -19,26 +19,14 @@ def minOperations(n):
     """
     if n <= 1:
         return 0
-    elif n == 2:
-        return 2
 
-    ans = minOperationsRec(n, 2, 1, 2)
-    if ans == float('inf'):
-        return 0
+    dp = [0] * (n + 1)
+    dp[2] = 2
+    for i in range(3, n + 1):
+        dp[i] = i
+        for j in range(i - 1, 1, -1):
+            if i % j == 0:
+                dp[i] = dp[j] + i // j
+                break
 
-    return ans
-
-
-def minOperationsRec(n, Hnum, HprevNum, opCount):
-    """
-    Recursive function to calculate the fewest number of operations needed.
-    """
-    if Hnum == n:
-        return opCount
-    elif Hnum > n:
-        return float('inf')
-
-    op1 = minOperationsRec(n, Hnum + HprevNum, HprevNum, opCount + 1)
-    op2 = minOperationsRec(n, Hnum * 2, Hnum, opCount + 2)
-
-    return min(op1, op2)
+    return dp[n]
