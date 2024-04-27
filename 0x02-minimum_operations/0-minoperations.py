@@ -20,13 +20,12 @@ def minOperations(n):
     if n <= 1:
         return 0
 
-    dp = [0] * (n + 1)
-    dp[2] = 2
-    for i in range(3, n + 1):
-        dp[i] = i
-        for j in range(i - 1, 1, -1):
-            if i % j == 0:
-                dp[i] = dp[j] + i // j
-                break
-
-    return dp[n]
+    operations = 0
+    divisor = 2
+    while n > 1:
+        if n % divisor == 0:
+            n = n / divisor
+            operations += divisor
+        else:
+            divisor += 1
+    return operations
