@@ -24,30 +24,30 @@ import sys
 import signal
 
 
-def displayStatus():
-    """Display the status every 10 times and/or KeyboardInterrupt(CTRL + C)"""
-    print("File size: {:d}".format(fileSizes))
-    if flag:
-        for code in statusCodes:
-            print("{:d}: {:d}".format(code, statusCodesDict[code]))
-
-
-def handler(signum, frame):
-    """CTRL + C handler"""
-    displayStatus()
-    sys.exit(0)
-
-
-signal.signal(signal.SIGINT, handler)
-
 flag = True
 count = fileSizes = 0
 statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
 statusCodesDict = {}
 for code in statusCodes:
     statusCodesDict[code] = 0
-
 p = r'^\d+\.\d+\.\d+\.\d+ - \[.*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
+
+
+def displayStatus():
+    """Display the status every 10 times and/or KeyboardInterrupt(CTRL + C)"""
+    print("File size: {:d}".format(fileSizes))
+    if flag:
+        for code in statusCodes:
+            if statusCodesDict[code] > 0:
+                print("{:d}: {:d}".format(code, statusCodesDict[code]))
+
+
+def handler(signum, frame):
+    """CTRL + C handler"""
+    displayStatus()
+
+
+signal.signal(signal.SIGINT, handler)
 
 try:
     for line in sys.stdin:
