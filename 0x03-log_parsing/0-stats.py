@@ -37,7 +37,7 @@ def displayStatus():
     print("File size: {:d}".format(fileSizes))
     for code in sorted(statusCodesDict.keys()):
         if statusCodesDict[code] > 0:
-            print("{:d}: {:d}".format(code, statusCodesDict[code]))
+            print("{}: {:d}".format(code, statusCodesDict[code]))
 
 
 def handler(signum, frame):
