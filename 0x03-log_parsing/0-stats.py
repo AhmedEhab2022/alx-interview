@@ -43,6 +43,7 @@ def displayStatus():
 def handler(signum, frame):
     """CTRL + C handler"""
     displayStatus()
+    sys.exit(0)
 
 
 signal.signal(signal.SIGINT, handler)
