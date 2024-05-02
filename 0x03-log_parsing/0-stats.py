@@ -35,7 +35,7 @@ p = r'^\d+\.\d+\.\d+\.\d+ - \[.*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
 def displayStatus():
     """Display the status every 10 times and/or KeyboardInterrupt(CTRL + C)"""
     print("File size: {:d}".format(fileSizes))
-    for code in sorted(statusCodesDict):
+    for code in sorted(statusCodesDict.keys()):
         if statusCodesDict[code] > 0:
             print("{:d}: {:d}".format(code, statusCodesDict[code]))
 
