@@ -27,11 +27,13 @@ import signal
 def handler(signum, frame):
     """CTRL + C handler"""
     print("File size: {:d}".format(fileSizes))
-    if not flag:
-        return
-    for code in statusCodes:
-        print("{:d}: {:d}".format(code, statusCodesDict[code]))
-    
+    if flag:
+        for code in statusCodes:
+            print("{:d}: {:d}".format(code, statusCodesDict[code]))
+
+    fileSizes = 0
+    statusCodesDict = {}
+
 
 if __name__ == "__main__":
     flag = True
