@@ -1,48 +1,68 @@
 #!/usr/bin/python3
+"""
+script that reads stdin line by line and computes metrics:
+
+Input format: <IP Address> - [<date>] "GET /projects/260 HTTP/1.1"
+<status code> <file size>
+(if the format is not this one, the line must be skipped)
+
+After every 10 lines and/or a keyboard interruption (CTRL + C),
+print these statistics from the beginning:
+
+Total file size: File size: <total size>
+where <total size> is the sum of all previous <file size>
+(see input format above)
+Number of lines by status code:
+possible status code: 200, 301, 400, 401, 403, 404, 405 and 500
+if a status code doesn’t appear or is not an integer,
+don’t print anything for this status code
+format: <status code>: <number>
+status codes should be printed in ascending order
+"""
+import re
 import sys
 import signal
 
-# Initialize variables
-total_size = 0
-status_codes = {str(i): 0 for i in [200, 301, 400, 401, 403, 404, 405, 500]}
+
+count = fileSizes = 0
+statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
+statusCodesDict = {}
+for code in statusCodes:
+    statusCodesDict[code] = 0
+p = r'^\d+\.\d+\.\d+\.\d+ - \[.*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
 
 
-def print_stats():
-    print("File size: {}".format(total_size))
-    for code in sorted(status_codes.keys()):
-        if status_codes[code] > 0:
-            print("{}: {}".format(code, status_codes[code]))
+def displayStatus():
+    """Display the status every 10 times and/or KeyboardInterrupt(CTRL + C)"""
+    print("File size: {:d}".format(fileSizes))
+    for code in sorted(statusCodesDict.keys()):
+        if statusCodesDict[code] > 0:
+            print("{}: {:d}".format(code, statusCodesDict[code]))
 
 
-def signal_handler(sig, frame):
-    print_stats()
+def handler(signum, frame):
+    """CTRL + C handler"""
+    displayStatus()
     sys.exit(0)
 
 
-# Handle keyboard interruption (CTRL + C)
-signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGINT, handler)
 
 try:
-    for i, line in enumerate(sys.stdin, 1):
-        try:
-            parts = line.split()
-            size = int(parts[-1])
-            status_code = parts[-2]
+    for line in sys.stdin:
+        match = re.match(p, line)
+        if not match:
+            continue
 
-            # Update total size and status code count
-            total_size += size
-            if status_code in status_codes:
-                status_codes[status_code] += 1
+        if int(match.group(1)) in statusCodesDict:
+            statusCodesDict[int(match.group(1))] += 1
+            fileSizes += int(match.group(2))
+            count += 1
 
-        except Exception as e:
-            pass
-
-        # After every 10 lines, print statistics from the beginning
-        if i % 10 == 0:
-            print_stats()
+        if count == 10:
+            displayStatus()
+            count = 0
 
 except KeyboardInterrupt:
-    pass
-
-finally:
-    print_stats()
+    displayStatus()
+    sys.exit(0)
