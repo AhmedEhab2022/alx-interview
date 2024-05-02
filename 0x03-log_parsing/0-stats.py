@@ -41,6 +41,9 @@ flag = True
 count = fileSizes = 0
 statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
 statusCodesDict = {}
+for code in statusCodes:
+    statusCodesDict[code] = 0
+
 constStr = "\"GET /projects/260 HTTP/1.1\""
 pattern = r"^\d+\.\d+\.\d+\.\d+ - \[.*\]" + re.escape(constStr)
 pattern += r"\d+ \d+$"
