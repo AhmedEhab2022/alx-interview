@@ -24,15 +24,17 @@ import sys
 import signal
 
 
-def handler(signum, frame):
-    """CTRL + C handler"""
+def displayStatus():
+    """Display the status every 10 times and/or KeyboardInterrupt(CTRL + C)"""
     print("File size: {:d}".format(fileSizes))
     if flag:
         for code in statusCodes:
             print("{:d}: {:d}".format(code, statusCodesDict[code]))
 
-    fileSizes = 0
-    statusCodesDict = {}
+
+def handler(signum, frame):
+    """CTRL + C handler"""
+    displayStatus()
 
 
 signal.signal(signal.SIGINT, handler)
@@ -48,18 +50,21 @@ constStr = "\"GET /projects/260 HTTP/1.1\""
 pattern = r"^\d+\.\d+\.\d+\.\d+ - \[.*\]" + re.escape(constStr)
 pattern += r"\d+ \d+$"
 
-for line in sys.stdin:
-    if not re.match(pattern, line):
-        continue
+try:
+    for line in sys.stdin:
+        if not re.match(pattern, line):
+            continue
 
-    if count == 10:
-        count = 0
-        sys.exit()
+        if count == 10:
+            count = 0
+            displayStatus()
 
-    if int(line.split()[len(line) - 2]) in statusCodes:
-        statusCodesDict[line.split()[len(line) - 2]] += 1
-    else:
-        flag = False
+        if int(line.split()[len(line) - 2]) in statusCodes:
+            statusCodesDict[line.split()[len(line) - 2]] += 1
+        else:
+            flag = False
 
-    fileSizes += int(line.split()[len(line) - 1])
-    count += 1
+        fileSizes += int(line.split()[len(line) - 1])
+        count += 1
+except KeyboardInterrupt:
+    displayStatus()
