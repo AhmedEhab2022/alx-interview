@@ -24,6 +24,31 @@ import sys
 import signal
 
 
+flag = True
+count = fileSizes = 0
+statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
+statusCodesDict = {}
+constStr = "\"GET /projects/260 HTTP/1.1\""
+pattern = r"^\d+\.\d+\.\d+\.\d+ - \[.*\]" + re.escape(constStr)
+pattern += r"\d+ \d+$"
+
+for line in sys.stdin:
+    if not re.match(pattern, line):
+        continue
+
+    if count == 10:
+        count = 0
+        sys.exit()
+
+    if int(line.split()[len(line) - 2]) in statusCodes:
+        statusCodesDict[line.split()[len(line) - 2]] += 1
+    else:
+        flag = False
+
+    fileSizes += int(line.split()[len(line) - 1])
+    count += 1
+
+
 def handler(signum, frame):
     """CTRL + C handler"""
     print("File size: {:d}".format(fileSizes))
@@ -35,28 +60,4 @@ def handler(signum, frame):
     statusCodesDict = {}
 
 
-if __name__ == "__main__":
-    flag = True
-    count = fileSizes = 0
-    statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
-    statusCodesDict = {}
-    constStr = "\"GET /projects/260 HTTP/1.1\""
-    pattern = r"^\d+\.\d+\.\d+\.\d+ - \[.*\]" + re.escape(constStr)
-    pattern += r"\d+ \d+$"
-
-    signal.signal(signal.SIGINT, handler)
-    for line in sys.stdin:
-        if not re.match(pattern, line):
-            continue
-
-        if count == 10:
-            count = 0
-            sys.exit()
-
-        if int(line.split()[len(line) - 2]) in statusCodes:
-            statusCodesDict[line.split()[len(line) - 2]] += 1
-        else:
-            flag = False
-
-        fileSizes += int(line.split()[len(line) - 1])
-        count += 1
+signal.signal(signal.SIGINT, handler)
