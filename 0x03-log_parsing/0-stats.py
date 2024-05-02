@@ -47,13 +47,11 @@ statusCodesDict = {}
 for code in statusCodes:
     statusCodesDict[code] = 0
 
-constStr = "\"GET /projects/260 HTTP/1.1\""
-pattern = r"^\d+\.\d+\.\d+\.\d+ - \[.*\]" + re.escape(constStr)
-pattern += r"\d+ \d+$"
+p = r'^\d+\.\d+\.\d+\.\d+ - \[.*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
 
 try:
     for line in sys.stdin:
-        match = re.match(pattern, line)
+        match = re.match(p, line)
         if not match:
             continue
 
