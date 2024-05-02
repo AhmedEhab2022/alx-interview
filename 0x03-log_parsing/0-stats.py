@@ -24,6 +24,19 @@ import sys
 import signal
 
 
+def handler(signum, frame):
+    """CTRL + C handler"""
+    print("File size: {:d}".format(fileSizes))
+    if flag:
+        for code in statusCodes:
+            print("{:d}: {:d}".format(code, statusCodesDict[code]))
+
+    fileSizes = 0
+    statusCodesDict = {}
+
+
+signal.signal(signal.SIGINT, handler)
+
 flag = True
 count = fileSizes = 0
 statusCodes = [200, 301, 400, 401, 403, 404, 405, 500]
@@ -47,17 +60,3 @@ for line in sys.stdin:
 
     fileSizes += int(line.split()[len(line) - 1])
     count += 1
-
-
-def handler(signum, frame):
-    """CTRL + C handler"""
-    print("File size: {:d}".format(fileSizes))
-    if flag:
-        for code in statusCodes:
-            print("{:d}: {:d}".format(code, statusCodesDict[code]))
-
-    fileSizes = 0
-    statusCodesDict = {}
-
-
-signal.signal(signal.SIGINT, handler)
