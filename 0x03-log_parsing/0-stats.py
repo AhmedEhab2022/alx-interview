@@ -35,6 +35,7 @@ def displayStatus():
 def handler(signum, frame):
     """CTRL + C handler"""
     displayStatus()
+    sys.exit(0)
 
 
 signal.signal(signal.SIGINT, handler)
@@ -52,19 +53,20 @@ pattern += r"\d+ \d+$"
 
 try:
     for line in sys.stdin:
-        if not re.match(pattern, line):
+        match = re.match(pattern, line)
+        if not match:
             continue
 
         if count == 10:
             count = 0
             displayStatus()
 
-        if int(line.split()[len(line) - 2]) in statusCodes:
-            statusCodesDict[line.split()[len(line) - 2]] += 1
+        if int(match.group(1)) in statusCodes:
+            statusCodesDict[int(match.group(1))] += 1
         else:
             flag = False
 
-        fileSizes += int(line.split()[len(line) - 1])
+        fileSizes += int(match.group(2))
         count += 1
 except KeyboardInterrupt:
     displayStatus()
