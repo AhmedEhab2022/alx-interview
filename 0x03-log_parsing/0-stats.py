@@ -62,6 +62,7 @@ try:
         if count == 10:
             displayStatus()
             count = 0
+    displayStatus()
 
 except KeyboardInterrupt:
     displayStatus()
