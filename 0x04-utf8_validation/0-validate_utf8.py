@@ -31,8 +31,5 @@ def validUTF8(data):
                 count = 3
             else:
                 return False
-            if count > len(data) - 1:
-                return False
-    if count > 0:
-        return False
-    return True
+
+    return count == 0
