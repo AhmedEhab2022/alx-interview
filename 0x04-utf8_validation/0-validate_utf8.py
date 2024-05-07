@@ -15,13 +15,13 @@ def validUTF8(data):
     """
     count = 0
     for num in data:
-        binaryStr = bin(num)[2:].zfill(8)
+        binaryStr = f'{num:08b}'
         if count > 0:
             if binaryStr[:2] != '10':
                 return False
             count -= 1
         else:
-            if binaryStr[:1] == '0':
+            if binaryStr[0] == '0':
                 continue
             elif binaryStr[:3] == '110':
                 count = 1
