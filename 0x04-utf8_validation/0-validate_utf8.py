@@ -16,19 +16,21 @@ def validUTF8(data):
     count = 0
     for num in data:
         binaryStr = f'{num:08b}'
-        if count > 0 and binaryStr[:2] != '10':
-            return False
-        elif count > 0 and binaryStr[:2] == '10':
+        if count > 0:
+            if binaryStr[:2] != '10':
+                return False
             count -= 1
-        elif count == 0 and binaryStr[:2] == '10':
-            return False
-        elif count == 0:
-            for binaryChar in binaryStr:
-                if binaryChar == '0':
-                    break
-                else:
-                    count += 1
-            count -= 1
+        else:
+            if binaryStr[:1] == '0':
+                continue
+            elif binaryStr[:3] == '110':
+                count = 1
+            elif binaryStr[:4] == '1110':
+                count = 2
+            elif binaryStr[:5] == '11110':
+                count = 3
+            else:
+                return False
     if count > 0:
         return False
     return True
