@@ -15,7 +15,7 @@ def validUTF8(data):
     """
     count = 0
     for num in data:
-        binaryStr = f'{num:08b}'
+        binaryStr = bin(num)[2:].zfill(8)
         if count > 0:
             if binaryStr[:2] != '10':
                 return False
