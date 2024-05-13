@@ -76,7 +76,6 @@ def main():
     """
     n = sys.argv[1]
     if validateArgs(sys.argv):
-        n = 6
         board = []
         for i in range(n):
             row = []
