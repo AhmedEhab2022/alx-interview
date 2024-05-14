@@ -12,13 +12,16 @@ def validateArgs(argv):
         print("Usage: nqueens N")
         return False
 
-    if isinstance(argv[1], int):
+    try:
+        n = int(argv[1])
+    except ValueError:
         print('N must be a number')
         return False
 
-    if argv[1] < 4:
+    if n < 4:
         print('N must be at least 4')
         return False
+
 
     return True
 
@@ -75,7 +78,7 @@ def main():
     """ Main Function
     """
     if validateArgs(sys.argv):
-        n = sys.argv[1]
+        n = int(sys.argv[1])
         board = []
         for i in range(n):
             row = []
