@@ -22,7 +22,6 @@ def validateArgs(argv):
         print('N must be at least 4')
         return False
 
-
     return True
 
 
