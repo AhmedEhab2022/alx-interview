@@ -74,8 +74,8 @@ def NQueensSolver(n, board, solution, row):
 def main():
     """ Main Function
     """
-    n = sys.argv[1]
     if validateArgs(sys.argv):
+        n = sys.argv[1]
         board = []
         for i in range(n):
             row = []
