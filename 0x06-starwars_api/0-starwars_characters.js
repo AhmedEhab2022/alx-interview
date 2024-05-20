@@ -10,8 +10,8 @@ async function getCharactersOfMovie (movieId) {
 
 async function DisplayStarWarsCharactersOfMovie (movieId) {
   const charactersArray = await getCharactersOfMovie(movieId);
-  for (const charactersUrl of charactersArray) {
-    const response = await fetch(charactersUrl);
+  for (const characterUrl of charactersArray) {
+    const response = await fetch(characterUrl);
     const data = await response.json();
     console.log(data.name);
   }
