@@ -9,13 +9,11 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    dp = [total + 1 for k in range(total + 1)]
+    dp = [float('inf')] * (total + 1)
     dp[0] = 0
     for i in range(1, total + 1):
-        for j in range(len(coins)):
-            if coins[j] <= i:
-                sub = dp[i - coins[j]]
-                if sub != total + 1:
-                    dp[i] = min(sub + 1, dp[i])
+        for coin in coins:
+            if coin <= i:
+                dp[i] = min(dp[i], dp[i - coin] + 1)
 
-    return dp[total] if dp[total] != total + 1 else -1
+    return dp[total] if dp[total] != float('inf') else -1
