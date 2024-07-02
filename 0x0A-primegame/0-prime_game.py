@@ -32,11 +32,7 @@ def isWinner(x, nums):
     for round in range(x):
         n = nums[round]
         primes = sieveOfEratosthenes(n)
-        primesCount = 0
-        for prime in primes:
-            if prime:
-                primesCount += 1
-
+        primesCount = sum(primes[2:n + 1])
         if primesCount % 2:
             mariaRounds += 1
         else:
