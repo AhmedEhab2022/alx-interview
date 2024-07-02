@@ -11,6 +11,7 @@ def sieveOfEratosthenes(n):
         n: the end number
     """
     prime = [True for i in range(n + 1)]
+    prime[0], prime[1] = False, False
     p = 2
     while (p * p <= n):
         if (prime[p] == True):
