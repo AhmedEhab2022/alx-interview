@@ -17,7 +17,6 @@ def sieveOfEratosthenes(n):
             for i in range(p * p, n + 1, p):
                 prime[i] = False
         p += 1
-    prime[0], prime[1] = False, False
     return prime
 
 
